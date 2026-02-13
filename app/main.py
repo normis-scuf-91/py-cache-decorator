@@ -8,12 +8,13 @@ def cache(func: Callable) -> Callable:
     functools.wraps(func)
 
     def wrapper(*args, **kwargs) -> Any:
-        if args not in cache_results:
+        key = (args, tuple(sorted(kwargs.items())))
+        if key not in cache_results:
             print("Calculating new result")
             result = func(*args, **kwargs)
-            cache_results[args] = result
+            cache_results[key] = result
             return result
         print("Getting from cache")
-        return cache_results[args]
+        return cache_results[key]
 
     return wrapper
